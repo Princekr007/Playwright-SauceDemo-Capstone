@@ -83,6 +83,8 @@ test('Sort Products A to Z', async ({ page }) => {
 
     await productsPage.selectSortOption('az');
 
+    //await productsPage.selectSortOption('za');
+
     const names =
         await productsPage.productNames.allTextContents();
 
@@ -101,3 +103,33 @@ test('Verify Product Detail Page', async ({ page }) => {
         .toHaveURL(/inventory-item/);
 });
 
+test('Verify Product Detail Information', async ({ page }) => {
+
+    const productsPage = new ProductsPage(page);
+
+    await productsPage.openFirstProduct();
+
+    await expect(
+        page.locator('.inventory_details_name')
+    ).toBeVisible();
+
+    await expect(
+        page.locator('.inventory_details_price')
+    ).toBeVisible();
+
+    await expect(
+        page.locator('[data-test="add-to-cart"]')
+    ).toContainText('Add to cart');
+});
+
+test('Verify Back Navigation', async ({ page }) => {
+
+    const productsPage = new ProductsPage(page);
+
+    await productsPage.openFirstProduct();
+
+    await page.click('#back-to-products');
+
+    await expect(page)
+        .toHaveURL(/inventory/);
+});
