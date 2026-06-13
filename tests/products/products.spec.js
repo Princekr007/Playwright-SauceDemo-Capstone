@@ -83,7 +83,6 @@ test('Sort Products A to Z', async ({ page }) => {
 
     await productsPage.selectSortOption('az');
 
-    //await productsPage.selectSortOption('za');
 
     const names =
         await productsPage.productNames.allTextContents();
@@ -91,6 +90,62 @@ test('Sort Products A to Z', async ({ page }) => {
     console.log(names);
 
     expect(names[0]).toBe('Sauce Labs Backpack');
+});
+
+test('Verify Product Sorting Z to A', async ({ page }) => {
+
+    const productsPage = new ProductsPage(page);
+
+    await productsPage.selectSortOption('za');
+
+    const actualNames =
+        await productsPage.productNames.allTextContents();
+
+    const expectedNames =
+        [...actualNames].sort().reverse();
+
+    expect(actualNames)
+        .toEqual(expectedNames);
+});
+
+test('Verify Price Sorting Low to High', async ({ page }) => {
+
+    const productsPage = new ProductsPage(page);
+
+    await productsPage.selectSortOption('lohi');
+
+    const prices =
+        await productsPage.productPrices.allTextContents();
+
+    const actualPrices = prices.map(
+        price => parseFloat(price.replace('$', ''))
+    );
+
+    const expectedPrices =
+        [...actualPrices].sort((a, b) => a - b);
+
+    expect(actualPrices)
+        .toEqual(expectedPrices);
+});
+
+test('Verify Price Sorting High to Low', async ({ page }) => {
+
+    const productsPage = new ProductsPage(page);
+
+    await productsPage.selectSortOption('hilo');
+
+    const prices =
+        await productsPage.productPrices.allTextContents();
+
+    const actualPrices = prices.map(
+        price => parseFloat(price.replace('$', ''))
+    );
+
+    const expectedPrices =
+        [...actualPrices].sort((a, b) => b - a);
+
+    expect(actualPrices)
+        .toEqual(expectedPrices);
 });
 
 test('Verify Product Detail Page', async ({ page }) => {
