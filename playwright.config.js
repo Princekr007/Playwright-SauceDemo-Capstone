@@ -11,8 +11,8 @@ module.exports = defineConfig({
   retries: 1,
 
   reporter: [
-    ['html'],
-    ['list']
+  ['html'],
+  ['list', { printSteps: true }]
   ],
 
   use: {
