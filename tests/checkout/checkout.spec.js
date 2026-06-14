@@ -137,3 +137,17 @@ test('Verify Order Confirmation Message', async ({ page }) => {
     expect(message)
         .toContain('Thank you for your order!');
 });
+
+test('Checkout With Empty Cart', async ({ page }) => {
+
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page);
+
+    await cartPage.openCart();
+
+    await checkoutPage.clickCheckout();
+
+    await expect(
+        page.locator('#first-name')
+    ).toBeVisible();
+});

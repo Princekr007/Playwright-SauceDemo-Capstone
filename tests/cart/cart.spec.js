@@ -107,3 +107,27 @@ test('Add Distinct Products', async ({ page }) => {
         .not.toBe(secondProduct);
 });
 
+test('Verify Cart Subtotal Calculation', async ({ page }) => {
+
+    const productsPage = new ProductsPage(page);
+    const cartPage = new CartPage(page);
+
+    await productsPage.addProductByIndex(0);
+    await productsPage.addProductByIndex(1);
+
+    await cartPage.openCart();
+
+    const prices = await page
+        .locator('.inventory_item_price')
+        .allTextContents();
+
+    const subtotal = prices.reduce(
+        (sum, price) =>
+            sum + parseFloat(price.replace('$', '')),
+        0
+    );
+
+    console.log('Cart Total = ', subtotal);
+
+    expect(subtotal).toBeGreaterThan(0);
+});

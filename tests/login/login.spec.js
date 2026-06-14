@@ -85,3 +85,20 @@ test('Performance Glitch User Login', async ({ page }) => {
     await expect(page)
         .toHaveURL(/inventory/);
 });
+
+test('Script Injection Attempt', async ({ page }) => {
+
+    const loginPage =
+        new LoginPage(page);
+
+    await loginPage.navigateToLoginPage();
+
+    await loginPage.login(
+        '<script>alert("XSS")</script>',
+        'secret_sauce'
+    );
+
+    await expect(
+        page.locator('[data-test="error"]')
+    ).toBeVisible();
+});
