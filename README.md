@@ -4,7 +4,7 @@
 
 This project is an End-to-End Automation Framework developed using Playwright with JavaScript for the SauceDemo application.
 
-The framework follows the Page Object Model (POM) design pattern and covers Login, Products, Cart, Checkout, Mobile Testing, Network Simulation, API Mocking, Accessibility Validation, Reporting, and CI/CD integration.
+The framework follows the Page Object Model (POM) design pattern and covers Login, Products, Product Details, Cart, Checkout, Mobile Testing, Network Simulation, API Mocking, Accessibility Validation, Security Validation, Reporting, and CI/CD integration.
 
 ---
 
@@ -26,7 +26,44 @@ Page Object Model (POM) is implemented using:
 * CartPage
 * CheckoutPage
 
-Test data is maintained separately in the test-data folder.
+Test data is maintained separately in the `test-data` folder to support data-driven testing and improve maintainability.
+
+---
+
+## Project Structure
+
+```text
+Playwright-SauceDemo-Capstone
+│
+├── .github
+│   └── workflows
+│       └── playwright.yml
+│
+├── src
+│   └── pages
+│       ├── LoginPage.js
+│       ├── ProductsPage.js
+│       ├── CartPage.js
+│       └── CheckoutPage.js
+│
+├── test-data
+│   └── loginData.js
+│
+├── tests
+│   ├── login
+│   ├── products
+│   ├── cart
+│   ├── checkout
+│   ├── mobile
+│   ├── network
+│   ├── api
+│   ├── accessibility
+│   └── smoke
+│
+├── playwright.config.js
+├── package.json
+└── README.md
+```
 
 ---
 
@@ -39,17 +76,23 @@ Test data is maintained separately in the test-data folder.
 * Locked User Login
 * Empty Username Validation
 * Empty Password Validation
-* Performance Glitch User
+* Performance Glitch User Login
+* Script Injection Validation
 
 ### Products Module
 
 * Product Count Validation
-* Product Name Validation
-* Product Price Validation
-* Product Image Validation
+* Product Names Validation
+* Product Prices Validation
+* Product Images Validation
 * Add To Cart Button Validation
-* Product Sorting Validation
+* Sort Products A-Z
+* Sort Products Z-A
+* Sort Products Low-High
+* Sort Products High-Low
 * Product Detail Page Validation
+* Product Detail Information Validation
+* Back Navigation Validation
 
 ### Cart Module
 
@@ -58,7 +101,8 @@ Test data is maintained separately in the test-data folder.
 * Add Multiple Products
 * Remove Product From Cart
 * Verify Cart Badge Updates
-* Distinct Product Validation
+* Add Distinct Products
+* Cart Subtotal Validation
 
 ### Checkout Module
 
@@ -67,13 +111,108 @@ Test data is maintained separately in the test-data folder.
 * Empty Last Name Validation
 * Empty Postal Code Validation
 * Order Confirmation Validation
+* Checkout With Empty Cart
 
-### Additional Scenarios
+### Accessibility Testing
 
-* Mobile Viewport Testing
-* Network Failure Simulation
-* API Mocking
-* Accessibility Checks
+* Login Page Accessibility Validation
+* Product Image Alt Text Validation
+
+### API Testing
+
+* API Mocking using `route.fulfill()`
+
+### Network Testing
+
+* Network Failure Simulation using `route.abort()`
+
+### Mobile Testing
+
+* Mobile Viewport Login Validation
+
+### Smoke Testing
+
+* Inventory Page Smoke Test
+* Cart Page Smoke Test
+* Checkout Page Smoke Test
+
+---
+
+## Advanced Playwright Features
+
+### API Mocking
+
+```javascript
+await route.fulfill()
+```
+
+Used to mock backend responses and validate frontend behavior independently.
+
+### Network Simulation
+
+```javascript
+await route.abort()
+```
+
+Used to simulate network failures and validate application stability.
+
+### Parallel Execution
+
+```javascript
+fullyParallel: true
+```
+
+Tests execute simultaneously across workers to reduce execution time.
+
+### Retry Strategy
+
+```javascript
+retries: 1
+```
+
+Automatically retries failed tests caused by temporary issues.
+
+### Mobile Testing
+
+Tests executed using Playwright mobile viewport configuration.
+
+---
+
+## Reporting & Failure Artifacts
+
+The framework automatically generates:
+
+### HTML Reports
+
+Generate report:
+
+```bash
+npx playwright show-report
+```
+
+### Screenshots on Failure
+
+```javascript
+screenshot: 'only-on-failure'
+```
+
+### Videos on Failure
+
+```javascript
+video: 'retain-on-failure'
+```
+
+### Traces on Failure
+
+```javascript
+trace: 'retain-on-failure'
+```
+
+Open trace:
+
+```bash
+npx playwright show-trace trace.zip
+```
 
 ---
 
@@ -81,11 +220,15 @@ Test data is maintained separately in the test-data folder.
 
 Install dependencies:
 
+```bash
 npm install
+```
 
 Install Playwright browsers:
 
+```bash
 npx playwright install
+```
 
 ---
 
@@ -93,26 +236,27 @@ npx playwright install
 
 Run all tests:
 
+```bash
 npx playwright test
+```
 
-Run specific suite:
+Run a specific suite:
 
+```bash
 npx playwright test tests/login
+```
 
-Generate report:
+Run a specific test:
 
+```bash
+npx playwright test -g "Valid Login"
+```
+
+Open report:
+
+```bash
 npx playwright show-report
-
----
-
-## Reporting
-
-The framework supports:
-
-* HTML Reports
-* Screenshots on Failure
-* Videos on Failure
-* Trace Viewer
+```
 
 ---
 
@@ -120,36 +264,37 @@ The framework supports:
 
 GitHub Actions pipeline is configured to:
 
-* Install dependencies
+* Checkout repository
+* Install Node.js
+* Install project dependencies
 * Install Playwright browsers
-* Execute tests
-* Publish reports
+* Execute Playwright tests
+* Publish Playwright reports
+
+Workflow File:
+
+```text
+.github/workflows/playwright.yml
+```
 
 ---
 
-## Project Structure
+## Key Design Principles
 
-src/pages
-
-tests/login
-
-tests/products
-
-tests/cart
-
-tests/checkout
-
-tests/mobile
-
-tests/network
-
-tests/api
-
-tests/accessibility
-
-test-data
+* Page Object Model (POM)
+* Data-Driven Testing
+* Reusable Methods
+* Independent Test Cases
+* Failure Artifact Collection
+* CI/CD Integration
+* Scalable Framework Structure
 
 ---
 
-##Author
-Prince Kumar
+## Author
+
+**Prince Kumar**
+
+Developed as part of the Playwright SauceDemo Automation Capstone Project using Playwright, JavaScript, Page Object Model (POM), Reporting, Failure Artifacts, API Mocking, Network Simulation, Accessibility Testing, and GitHub Actions CI/CD.
+
+GitHub: https://github.com/Princekr007
